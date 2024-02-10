@@ -23,7 +23,7 @@ pipeline{
                 sh 'npm install'
             }
         }
-        stage('static code analusis'){
+        stage('static code analysis'){
             steps{
                 script{
                     withSonarQubeEnv(credentialsId: 'sonar-token', installationName: 'sonar-server'){
@@ -84,6 +84,11 @@ pipeline{
                         sh 'kubectl apply -f deployment.yml -f service.yml -f ingress.yml'
                     }
                 }
+            }
+        }
+        stage('trivy cluster scan'){
+            steps{
+                sh 'trivy k8s --report summary cluster > trivycl.txt'
             }
         }
     }
