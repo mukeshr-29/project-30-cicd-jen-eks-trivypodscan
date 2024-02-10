@@ -88,7 +88,11 @@ pipeline{
         }
         stage('trivy cluster scan'){
             steps{
-                sh 'trivy k8s --report summary cluster > trivycl.txt'
+                script{
+                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: ''){
+                        sh 'trivy k8s --report summary cluster > trivycl.txt'
+                    }
+                }
             }
         }
     }
