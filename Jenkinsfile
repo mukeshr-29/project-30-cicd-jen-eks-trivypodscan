@@ -77,9 +77,13 @@ pipeline{
                 }
             }
         }
-        stage('run in container'){
+        stage('deploy to eks fargate cluster'){
             steps{
-                sh 'docker run -d --name reddit -p 3000:3000 mukeshr29/redditclone-1'
+                script{
+                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: ''){
+                        sh 'kubectl apply -f deployment.yml -f service.yml -f ingress.yml'
+                    }
+                }
             }
         }
     }
