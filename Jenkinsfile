@@ -77,5 +77,10 @@ pipeline{
                 }
             }
         }
+        stage('run in container'){
+            steps{
+                sh 'docker run -d --name reddit -p 3000:3000 mukeshr29/redditclone-1'
+            }
+        }
     }
 }
